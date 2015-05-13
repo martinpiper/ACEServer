@@ -1,0 +1,19 @@
+Reduce to gherkin language, remove irrelevant options from the left hand pane.
+
+
+Minimise src/resources by stripping out unwanted files.
+
+
+Add JavaScript code to read regex definitions from an array (inserted into the returned data server side for ace-builds-master/demo/autocompletion.html) and autocomplete with that data.
+
+
+Make generic so it can be used with other Cucumber related projects.
+
+
+Add ability to save the current feature file.
+A request to save will send a POST request to "http://localhost:8000/ace-server/store/foo/filename.feature" containing the data to save.
+The path "foo/filename.feature" is relative to the Java code current directory.
+
+
+Add ability to load a feature file from if there is a URL parameter like "http://localhost:8000/ace-builds-master/kitchen-sink.html?filename=foo/filename.feature".
+The "foo/filename.feature" file is relative to the Java code current directory, not its resource directory.
