@@ -4,9 +4,6 @@ Reduce to gherkin language, remove irrelevant options from the left hand pane.
 Minimise src/resources by stripping out unwanted files.
 
 
-Add JavaScript code to read regex definitions from an array (inserted into the returned data server side for ace-builds-master/demo/autocompletion.html) and autocomplete with that data.
-
-
 Make generic so it can be used with other Cucumber related projects.
 
 

@@ -1,0 +1,3 @@
+Add JavaScript code to read regex definitions from an array (inserted into the returned data server side for ace-builds-master/demo/autocompletion.html) and autocomplete with that data.
+* ace-builds-master/gherkin-steps.js is read to find the step matches.
+    It can be read from the current directory, src/main/resources, target/ or finally the resources

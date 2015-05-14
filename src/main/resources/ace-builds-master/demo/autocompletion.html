@@ -22,24 +22,67 @@
 
 <pre id="editor"></pre>
 
+<script src="../gherkin-steps.js"></script>
 <!-- load ace -->
-<script src="../src-noconflict/ace.js"></script>
+<script src="../src/ace.js"></script>
 <!-- load ace language tools -->
-<script src="../src-noconflict/ext-language_tools.js"></script>
+<script src="../src/ext-language_tools.js"></script>
 <script>
+    if (!Array.prototype.indexOf) {
+       Array.prototype.indexOf = function(item) {
+          var i = this.length;
+          while (i--) {
+             if (this[i] === item) return i;
+          }
+          return -1;
+       }
+    }
+
     // trigger extension
-    ace.require("ace/ext/language_tools");
+    var langTools = ace.require("ace/ext/language_tools");
     var editor = ace.edit("editor");
-    editor.session.setMode("ace/mode/html");
-    editor.setTheme("ace/theme/tomorrow");
+    editor.session.setMode("ace/mode/gherkin");
+    editor.setTheme("ace/theme/chrome");
     // enable autocompletion and snippets
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,
         enableLiveAutocompletion: false
     });
+    editor.$blockScrolling = Infinity;
+    editor.session.setTabSize(2);
+    editor.setShowInvisibles(true);
+
+    var likeCompleter = {
+        getCompletions: function(editor, session, pos, prefix, callback) {
+            var results = [];
+
+            // Add substring matches first
+            var i;
+            for (i = 0; i < simplePotentials.length; i++) {
+              if (simplePotentials[i].toLowerCase().indexOf(prefix.toLowerCase()) >= -1) {
+                results.push(simplePotentials[i]);
+              }
+            }
+
+            // Add other matches after
+            for (i = 0; i < simplePotentials.length; i++) {
+              if (results.indexOf(simplePotentials[i]) == -1) {
+                results.push(simplePotentials[i]);
+              }
+            }
+
+            if (results.length == 0) { callback(null, []); return; }
+
+            for (i = 0 ; i < results.length ; i++) {
+              callback(null , [{name: results[i], value: results[i], score: 200+i, meta: 'best'}]);
+            }
+            return;
+        }
+    }
+    langTools.addCompleter(likeCompleter);
+
 </script>
 
-<script src="./show_own_source.js"></script>
 </body>
 </html>
