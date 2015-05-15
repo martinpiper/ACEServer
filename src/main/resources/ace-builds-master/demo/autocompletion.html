@@ -82,6 +82,29 @@
     }
     langTools.addCompleter(likeCompleter);
 
+    var config = ace.require("ace/config");
+    config.loadModule("ace/ext/keybinding_menu", function(module) {
+            module.init(editor);
+    });
+
+    var net = require("ace/lib/net");
+    net.get("/ace-builds-master/t.feature", function(t){
+        var el = document.getElementById("editor");
+        el.env.editor.setValue(t, 1);
+    });
+
+    editor.commands.addCommand(
+    {
+        name: "saveDocument",
+        bindKey: {win: "Ctrl-s", mac: "Command-s"},
+        exec: function(editor)
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open("PUT" , "/data/t.feature" , true);
+            xhr.send(editor.getValue());
+        }
+    });
+
 </script>
 
 </body>

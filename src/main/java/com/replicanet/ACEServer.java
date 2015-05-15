@@ -5,10 +5,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.apache.commons.io.IOUtils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 
 /**
@@ -42,7 +39,7 @@ public class ACEServer
 					try
 					{
 						// Try "target/"...  from the current directory
-						input = new FileInputStream("target" + uri);
+						input = new FileInputStream("target" + uri.substring(18));
 					}
 					catch (Exception e3)
 					{
@@ -58,6 +55,22 @@ public class ACEServer
 			IOUtils.copy(input, os);
 
 			os.close();
+			input.close();
+		}
+	}
+
+
+	static class MyHandlerPut implements HttpHandler
+	{
+		public void handle(HttpExchange t) throws IOException
+		{
+			String uri = t.getRequestURI().getPath();
+			System.out.println(uri);
+
+			// Writes the file from the online editor
+			OutputStream out = new FileOutputStream("target" + uri.substring(5));
+			IOUtils.copy(t.getRequestBody(),out);
+			out.close();
 		}
 	}
 
@@ -75,6 +88,10 @@ public class ACEServer
 				server.stop(0);
 			}
 		});
+
+		// var xhr = new XMLHttpRequest(); xhr.open("PUT" , "/data/t.feature" , true); xhr.send(editor.getValue());
+		server.createContext("/data", new MyHandlerPut());
+
 		server.setExecutor(null);
 		server.start();
 

@@ -1,3 +1,9 @@
 Add JavaScript code to read regex definitions from an array (inserted into the returned data server side for ace-builds-master/demo/autocompletion.html) and autocomplete with that data.
 * ace-builds-master/gherkin-steps.js is read to find the step matches.
     It can be read from the current directory, src/main/resources, target/ or finally the resources
+
+
+Add ability to save the current feature file.
+*Ctrl+S
+A request to save will send a PUT request to "http://localhost:8000/data/t.feature" containing the data to save.
+The path "t.feature" is relative to the Java code current "target" directory.
