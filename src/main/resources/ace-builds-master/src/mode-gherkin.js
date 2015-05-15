@@ -115,7 +115,7 @@ oop.inherits(Mode, TextMode);
                 indent += space2;
             } else if(line.match("(Given|Then).+(:)$|Examples:")) {
             	indent += space2;
-            } else if(line.match("\\*.+")) {
+            } else if(line.match("^\\s*\\*.+")) {
             	indent += "* ";
             } 
         }
