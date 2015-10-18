@@ -6,4 +6,13 @@ Add JavaScript code to read regex definitions from an array (inserted into the r
 Add ability to save the current feature file.
 *Ctrl+S
 A request to save will send a PUT request to "http://localhost:8000/data/t.feature" containing the data to save.
-The path "t.feature" is relative to the Java code current "target" directory.
+The path "t.feature" is relative to the Java code current directory.
+
+
+
+This URL parameter will set the filename to try to read and save when using the server: filename=t2.feature
+
+
+
+Add ability to load a feature file from if there is a URL parameter like "http://localhost:8000/ace-builds-master/kitchen-sink.html?filename=foo/filename.feature".
+The "foo/filename.feature" file is relative to the Java code current directory, not its resource directory.

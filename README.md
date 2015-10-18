@@ -2,6 +2,9 @@ A Java ACE HTTP server with gherkin auto-completion added.
 
 Starts with the URL: http://localhost:8000/ace-builds-master/demo/autocompletion.html
 
+Or: http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t1.feature
+Or: http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t2.feature
+
 This will stop the server: http://localhost:8000/stop
 
 * ace-builds-master/gherkin-steps.js is read to find the step matches.

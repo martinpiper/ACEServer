@@ -20,6 +20,7 @@ public class ACEServer
 		public void handle(HttpExchange t) throws IOException
 		{
 			String uri = t.getRequestURI().getPath();
+			// MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path for all options below...
 			System.out.println(uri);
 			InputStream input = null;
 			try
@@ -43,8 +44,16 @@ public class ACEServer
 					}
 					catch (Exception e3)
 					{
-						// Lastly try the packaged resources
-						input = ACEServer.class.getResourceAsStream(uri);
+						try
+						{
+							// Try the current directory minus the "/ace-builds-master/"
+							input = new FileInputStream(uri.substring(19));
+						}
+						catch (Exception e4)
+						{
+							// Lastly try the packaged resources
+							input = ACEServer.class.getResourceAsStream(uri);
+						}
 					}
 				}
 			}
@@ -68,7 +77,8 @@ public class ACEServer
 			System.out.println(uri);
 
 			// Writes the file from the online editor
-			OutputStream out = new FileOutputStream("target" + uri.substring(5));
+			// MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path
+			OutputStream out = new FileOutputStream(uri.substring(6));
 			IOUtils.copy(t.getRequestBody(),out);
 			out.close();
 		}
@@ -76,7 +86,18 @@ public class ACEServer
 
 	public static void main(String[] args) throws Exception
 	{
-		server = HttpServer.create(new InetSocketAddress(8000), 0);
+		startServer(8000);
+
+		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t1.feature");
+		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t2.feature");
+		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html");
+		System.out.println("http://localhost:8000/ace-builds-master/kitchen-sink.html");
+		System.out.println("http://localhost:8000/stop/");
+	}
+
+	public static void startServer(int port) throws IOException
+	{
+		server = HttpServer.create(new InetSocketAddress(port), 0);
 		server.createContext("/ace-builds-master", new MyHandler());
 		server.createContext("/stop", new HttpHandler()
 		{
@@ -94,9 +115,5 @@ public class ACEServer
 
 		server.setExecutor(null);
 		server.start();
-
-		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html");
-		System.out.println("http://localhost:8000/ace-builds-master/kitchen-sink.html");
-		System.out.println("http://localhost:8000/stop/");
 	}
 }

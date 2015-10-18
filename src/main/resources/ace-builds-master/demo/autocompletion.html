@@ -28,6 +28,18 @@
 <!-- load ace language tools -->
 <script src="../src/ext-language_tools.js"></script>
 <script>
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++)
+        {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
     if (!Array.prototype.indexOf) {
        Array.prototype.indexOf = function(item) {
           var i = this.length;
@@ -88,7 +100,13 @@
     });
 
     var net = require("ace/lib/net");
-    net.get("/ace-builds-master/t.feature", function(t){
+
+    var filename = "t.feature";
+    if (getQueryVariable("filename") != "") {
+        filename = getQueryVariable("filename");
+    }
+
+    net.get("/ace-builds-master/" + filename, function(t){
         var el = document.getElementById("editor");
         el.env.editor.setValue(t, 1);
     });
@@ -100,7 +118,7 @@
         exec: function(editor)
         {
             var xhr = new XMLHttpRequest();
-            xhr.open("PUT" , "/data/t.feature" , true);
+            xhr.open("PUT" , "/data/"  + filename , true);
             xhr.send(editor.getValue());
         }
     });
