@@ -1,9 +1,3 @@
-MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path
-
-
-Reduce to gherkin language, remove irrelevant options from the left hand pane.
-
-
 Minimise src/resources by stripping out unwanted files.
 
 

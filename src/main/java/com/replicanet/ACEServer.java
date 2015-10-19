@@ -20,39 +20,41 @@ public class ACEServer
 		public void handle(HttpExchange t) throws IOException
 		{
 			String uri = t.getRequestURI().getPath();
-			// MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path for all options below...
-			System.out.println(uri);
+			if (System.getProperty("com.replicanet.ACEServer.debug.requests") != null)
+			{
+				System.out.println(uri);
+			}
 			InputStream input = null;
 			try
 			{
 				// Try getting a local file first from the current directory
-				input = new FileInputStream(uri.substring(1));	// Trim off the first '/'
+				input = new FileInputStream(makePathSafe(uri.substring(1)));	// Trim off the first '/'
 			}
 			catch (Exception e)
 			{
 				try
 				{
 					// Try "src/main/resources"...  from the current directory
-					input = new FileInputStream("src/main/resources" + uri);
+					input = new FileInputStream("src/main/resources/" + makePathSafe(uri));
 				}
 				catch (Exception e2)
 				{
 					try
 					{
 						// Try "target/"...  from the current directory
-						input = new FileInputStream("target" + uri.substring(18));
+						input = new FileInputStream("target/" + makePathSafe(uri.substring(18)));
 					}
 					catch (Exception e3)
 					{
 						try
 						{
 							// Try the current directory minus the "/ace-builds-master/"
-							input = new FileInputStream(uri.substring(19));
+							input = new FileInputStream(makePathSafe(uri.substring(19)));
 						}
 						catch (Exception e4)
 						{
 							// Lastly try the packaged resources
-							input = ACEServer.class.getResourceAsStream(uri);
+							input = ACEServer.class.getResourceAsStream("/" + makePathSafe(uri));
 						}
 					}
 				}
@@ -78,15 +80,25 @@ public class ACEServer
 
 			// Writes the file from the online editor
 			// MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path
-			OutputStream out = new FileOutputStream(uri.substring(6));
+			OutputStream out = new FileOutputStream(makePathSafe(uri.substring(6)));
 			IOUtils.copy(t.getRequestBody(),out);
 			out.close();
 		}
 	}
 
+	static String makePathSafe(String path)
+	{
+		String ret = path.replace(".." , "");
+		while (ret.startsWith("/") || ret.startsWith("\\"))
+		{
+			ret = ret.substring(1);
+		}
+		return ret;
+	}
+
 	public static void main(String[] args) throws Exception
 	{
-		startServer(8000);
+		startServer(new InetSocketAddress(8000));
 
 		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t1.feature");
 		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t2.feature");
@@ -95,9 +107,9 @@ public class ACEServer
 		System.out.println("http://localhost:8000/stop/");
 	}
 
-	public static void startServer(int port) throws IOException
+	public static void startServer(InetSocketAddress listenAddress) throws IOException
 	{
-		server = HttpServer.create(new InetSocketAddress(port), 0);
+		server = HttpServer.create(listenAddress, 0);
 		server.createContext("/ace-builds-master", new MyHandler());
 		server.createContext("/stop", new HttpHandler()
 		{
@@ -115,5 +127,13 @@ public class ACEServer
 
 		server.setExecutor(null);
 		server.start();
+	}
+
+	public static void stopServer() throws IOException
+	{
+		if (null != server)
+		{
+			server.stop(0);
+		}
 	}
 }

@@ -16,3 +16,15 @@ This URL parameter will set the filename to try to read and save when using the 
 
 Add ability to load a feature file from if there is a URL parameter like "http://localhost:8000/ace-builds-master/kitchen-sink.html?filename=foo/filename.feature".
 The "foo/filename.feature" file is relative to the Java code current directory, not its resource directory.
+
+
+
+MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path
+
+
+
+If the system property "com.replicanet.ACEServer.debug.requests" is set then the URL requests are displayed
+
+
+
+Reduce to gherkin language, remove irrelevant options from the left hand pane.
