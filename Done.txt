@@ -28,3 +28,8 @@ If the system property "com.replicanet.ACEServer.debug.requests" is set then the
 
 
 Reduce to gherkin language, remove irrelevant options from the left hand pane.
+
+
+
+Remove single word completers? http://stackoverflow.com/questions/26991288/ace-editor-autocompletion-remove-local-variables
+    See comment: // This removes hints for single words

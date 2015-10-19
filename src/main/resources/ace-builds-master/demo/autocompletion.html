@@ -3,24 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>ACE Autocompletion demo</title>
-  <style type="text/css" media="screen">
-    body {
-        overflow: hidden;
-    }
-    
-    #editor { 
-        margin: 0;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
-  </style>
+  <link rel="stylesheet" href="kitchen-sink/styles.css" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
+<div id="optionsPanel" style="position:absolute;height:100%;width:275px">
+    <a href="http://www.replicanet.com" title="ReplicaNet">
+        <img id="rn-logo" src="rnlogo.png" style="width: 172px;margin: -9px 30px -12px 51px;">
+    </a>
+    <div style="position: absolute; overflow: hidden; top:115px; bottom:0">
+        <div style="width: 100%; height:100%; ">
+            <iframe class="menu" src="../fileList.html" style="width:100%; height:100%;"></iframe>
+        </div>
+    </div>
+</div>
 
-<pre id="editor"></pre>
+<div id="editor-container"></div>
 
 <script src="../gherkin-steps.js"></script>
 <!-- load ace -->
@@ -52,9 +49,10 @@
 
     // trigger extension
     var langTools = ace.require("ace/ext/language_tools");
-    var editor = ace.edit("editor");
+    var editor = ace.edit("editor-container");
     editor.session.setMode("ace/mode/gherkin");
     editor.setTheme("ace/theme/chrome");
+    langTools.setCompleters([langTools.keyWordCompleter , langTools.snippetCompleter]);    // This removes hints for single words (no textCompleter)
     // enable autocompletion and snippets
     editor.setOptions({
         enableBasicAutocompletion: true,
@@ -64,6 +62,7 @@
     editor.$blockScrolling = Infinity;
     editor.session.setTabSize(2);
     editor.setShowInvisibles(true);
+    editor.focus();
 
     var likeCompleter = {
         getCompletions: function(editor, session, pos, prefix, callback) {
@@ -101,14 +100,15 @@
 
     var net = require("ace/lib/net");
 
-    var filename = "t.feature";
+    var filename = "features/newFile.feature";
     if (getQueryVariable("filename") != "") {
         filename = getQueryVariable("filename");
     }
 
     net.get("/ace-builds-master/" + filename, function(t){
-        var el = document.getElementById("editor");
+        var el = document.getElementById("editor-container");
         el.env.editor.setValue(t, 1);
+        editor.focus();
     });
 
     editor.commands.addCommand(
