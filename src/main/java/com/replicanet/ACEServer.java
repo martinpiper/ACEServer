@@ -7,6 +7,8 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  *
@@ -14,6 +16,7 @@ import java.net.InetSocketAddress;
 public class ACEServer
 {
 	static HttpServer server;
+	static Set<ACEServerCallback> callbacks = new LinkedHashSet<ACEServerCallback>();
 
 	static class MyHandler implements HttpHandler
 	{
@@ -67,6 +70,11 @@ public class ACEServer
 
 			os.close();
 			input.close();
+
+			for (ACEServerCallback callback : callbacks)
+			{
+				callback.afterGet(uri);
+			}
 		}
 	}
 
@@ -83,6 +91,11 @@ public class ACEServer
 			OutputStream out = new FileOutputStream(makePathSafe(uri.substring(6)));
 			IOUtils.copy(t.getRequestBody(),out);
 			out.close();
+
+			for (ACEServerCallback callback : callbacks)
+			{
+				callback.afterPut(uri);
+			}
 		}
 	}
 
@@ -99,6 +112,18 @@ public class ACEServer
 	public static void main(String[] args) throws Exception
 	{
 		startServer(new InetSocketAddress(8000));
+		addCallback(new ACEServerCallback()
+		{
+			public void afterGet(String uri)
+			{
+				System.out.println("afterGet " + uri);
+			}
+
+			public void afterPut(String uri)
+			{
+				System.out.println("afterPut " + uri);
+			}
+		});
 
 		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t1.feature");
 		System.out.println("http://localhost:8000/ace-builds-master/demo/autocompletion.html?filename=t2.feature");
@@ -135,5 +160,15 @@ public class ACEServer
 		{
 			server.stop(0);
 		}
+	}
+
+	public static void addCallback(ACEServerCallback callback)
+	{
+		callbacks.add(callback);
+	}
+
+	public static void removeCallback(ACEServerCallback callback)
+	{
+		callbacks.remove(callback);
 	}
 }

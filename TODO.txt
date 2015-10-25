@@ -2,7 +2,3 @@ Minimise src/resources by stripping out unwanted files.
 
 
 Make generic so it can be used with other Cucumber related projects.
-
-
-Create file edit box and button
-

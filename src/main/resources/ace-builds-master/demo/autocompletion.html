@@ -12,7 +12,8 @@
     </a>
     <div style="position: absolute; overflow: hidden; top:115px; bottom:0">
         <div style="width: 100%; height:100%; ">
-            <iframe class="menu" src="../fileList.html" style="width:100%; height:100%;"></iframe>
+            <input id="newFilename" type="text" name="txtJob" value="features/new.feature"><button onclick="createNewFile()">Edit file</button>
+            <iframe id="fileList" class="menu" src="../fileList.html" style="width:100%; height:100%;"></iframe>
         </div>
     </div>
 </div>
@@ -25,6 +26,11 @@
 <!-- load ace language tools -->
 <script src="../src/ext-language_tools.js"></script>
 <script>
+    function createNewFile()
+    {
+        var filename = document.getElementById("newFilename").value;
+        window.location.href = "autocompletion.html?filename=" + filename;
+    }
     function getQueryVariable(variable)
     {
         var query = window.location.search.substring(1);
@@ -100,9 +106,10 @@
 
     var net = require("ace/lib/net");
 
-    var filename = "features/newFile.feature";
+    var filename = "features/new.feature";
     if (getQueryVariable("filename") != "") {
         filename = getQueryVariable("filename");
+        document.getElementById("newFilename").value = filename;
     }
 
     net.get("/ace-builds-master/" + filename, function(t){
@@ -120,8 +127,14 @@
             var xhr = new XMLHttpRequest();
             xhr.open("PUT" , "/data/"  + filename , true);
             xhr.send(editor.getValue());
+            document.getElementById("fileList").contentWindow.location.reload();
         }
     });
+
+//    window.setInterval("reloadIFrame();", 1000);
+//    function reloadIFrame() {
+//        document.getElementById("fileList").contentWindow.location.reload();
+//    }
 
 </script>
 

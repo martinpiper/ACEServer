@@ -33,3 +33,11 @@ Reduce to gherkin language, remove irrelevant options from the left hand pane.
 
 Remove single word completers? http://stackoverflow.com/questions/26991288/ace-editor-autocompletion-remove-local-variables
     See comment: // This removes hints for single words
+
+
+
+Create file edit box and button
+
+
+
+Added ACEServerCallback interface and ACEServer.addCallback() , ACEServer.removeCallback()
