@@ -41,3 +41,16 @@ Create file edit box and button
 
 
 Added ACEServerCallback interface and ACEServer.addCallback() , ACEServer.removeCallback()
+
+
+
+Added optional line highlighting. If the file "<original filename>.debug.json" exists then it will be parsed and create markers.
+    This happens after the main document is loaded.
+    The CSS contains new styles passing_step_line and failing_step_line that can be used by the JSON line highlighter
+    Example format:
+        {
+        "lines" : [
+            { "type" : "passing_step_line" ,   "line" : 1 } ,
+            { "type" : "failing_step_line" ,   "line" : 3 }
+            ]
+        }

@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <title>ACE Autocompletion demo</title>
   <link rel="stylesheet" href="kitchen-sink/styles.css" type="text/css" media="screen" charset="utf-8">
+    <style>
+        .passing_step_line {
+        background-color: GreenYellow;
+        position: absolute;
+        }
+        .failing_step_line {
+        background-color: Tomato;
+        position: absolute;
+        }
+    </style>
 </head>
 <body>
 <div id="optionsPanel" style="position:absolute;height:100%;width:275px">
@@ -112,10 +122,39 @@
         document.getElementById("newFilename").value = filename;
     }
 
+    function loadJSON(url , callback) {
+
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', '../' + url, true); // We are in the "demo" space
+        xobj.onreadystatechange = function () {
+              if (xobj.readyState == 4 && xobj.status == "200") {
+                callback(xobj.responseText);
+              }
+        };
+        xobj.send(null);
+    }
+
     net.get("/ace-builds-master/" + filename, function(t){
         var el = document.getElementById("editor-container");
         el.env.editor.setValue(t, 1);
         editor.focus();
+
+        // This displays line highlights depending on the test run results
+        loadJSON( filename + ".debug.json", function( response ) {
+            var actual_JSON = JSON.parse(response);
+            aceRange = require('ace/range').Range;
+            var index;
+            for (index = 0 ; index < actual_JSON.lines.length ; index++) {
+                // This type of range will automatically move the selection if lines are inserted or deleted
+                var r = new aceRange();
+                r.start = editor.session.doc.createAnchor(actual_JSON.lines[index].line,0);
+                r.end = editor.session.doc.createAnchor(actual_JSON.lines[index].line,1);
+                editor.session.addMarker(r, actual_JSON.lines[index].type, "fullLine");
+            }
+        });
+
+
     });
 
     editor.commands.addCommand(

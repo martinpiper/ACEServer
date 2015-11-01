@@ -1,0 +1,6 @@
+{
+"lines" : [
+	{ "type" : "passing_step_line" ,   "line" : 1 } ,
+	{ "type" : "failing_step_line" ,   "line" : 3 }
+	]
+}
