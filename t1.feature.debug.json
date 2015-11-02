@@ -1,6 +1,12 @@
 {
-"lines" : [
-	{ "type" : "passing_step_line" ,   "line" : 1 } ,
-	{ "type" : "failing_step_line" ,   "line" : 3 }
-	]
+  "lines" : [
+	{ "type" : "passed_step_line" ,   "from" : 2 ,    "to" : 2} ,
+	{ "type" : "failed_step_line" ,   "from" : 3 ,    "to" : 3} ,
+	{ "type" : "undefined_step_line" ,   "from" : 4 ,    "to" : 4} ,
+	{ "type" : "pending_step_line" ,   "from" : 5 ,    "to" : 5} ,
+	{ "type" : "passed_step_line" ,   "from" : 8 ,    "to" : 8} ,
+	{ "type" : "pending_step_line" ,   "from" : 11 ,    "to" : 11} ,
+	{ "type" : "undefined_step_line" ,   "from" : 14 ,    "to" : 14} ,
+	{ "type" : "failed_step_line" ,   "from" : 17 ,    "to" : 17}
+  ]
 }

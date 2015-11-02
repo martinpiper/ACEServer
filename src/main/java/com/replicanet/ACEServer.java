@@ -28,36 +28,51 @@ public class ACEServer
 				System.out.println(uri);
 			}
 			InputStream input = null;
-			try
+
+			// Loop through the callbacks until one of them returns an InputStream
+			for (ACEServerCallback callback : callbacks)
 			{
-				// Try getting a local file first from the current directory
-				input = new FileInputStream(makePathSafe(uri.substring(1)));	// Trim off the first '/'
+				input = callback.beforeGet(uri);
+				if (null != input)
+				{
+					break;
+				}
 			}
-			catch (Exception e)
+
+			// No input yet? Then try other methods to get the input data to return
+			if (null == input)
 			{
 				try
 				{
-					// Try "src/main/resources"...  from the current directory
-					input = new FileInputStream("src/main/resources/" + makePathSafe(uri));
+					// Try getting a local file first from the current directory
+					input = new FileInputStream(makePathSafe(uri.substring(1)));    // Trim off the first '/'
 				}
-				catch (Exception e2)
+				catch (Exception e)
 				{
 					try
 					{
-						// Try "target/"...  from the current directory
-						input = new FileInputStream("target/" + makePathSafe(uri.substring(18)));
+						// Try "src/main/resources"...  from the current directory
+						input = new FileInputStream("src/main/resources/" + makePathSafe(uri));
 					}
-					catch (Exception e3)
+					catch (Exception e2)
 					{
 						try
 						{
-							// Try the current directory minus the "/ace-builds-master/"
-							input = new FileInputStream(makePathSafe(uri.substring(19)));
+							// Try "target/"...  from the current directory
+							input = new FileInputStream("target/" + makePathSafe(uri.substring(18)));
 						}
-						catch (Exception e4)
+						catch (Exception e3)
 						{
-							// Lastly try the packaged resources
-							input = ACEServer.class.getResourceAsStream("/" + makePathSafe(uri));
+							try
+							{
+								// Try the current directory minus the "/ace-builds-master/"
+								input = new FileInputStream(makePathSafe(uri.substring(19)));
+							}
+							catch (Exception e4)
+							{
+								// Lastly try the packaged resources
+								input = ACEServer.class.getResourceAsStream("/" + makePathSafe(uri));
+							}
 						}
 					}
 				}
@@ -114,6 +129,19 @@ public class ACEServer
 		startServer(new InetSocketAddress(8000));
 		addCallback(new ACEServerCallback()
 		{
+			public InputStream beforeGet(String uri)
+			{
+				// An example of what to do to return runtime generated data
+/*
+				if (uri.contains("moo.feature"))
+				{
+					String exampleString = "Hello world\n";
+					return new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8));
+				}
+*/
+				return null;
+			}
+
 			public void afterGet(String uri)
 			{
 				System.out.println("afterGet " + uri);
