@@ -131,6 +131,7 @@ public class ACEServer
 		{
 			public InputStream beforeGet(String uri)
 			{
+				System.out.println("beforeGet " + uri);
 				// An example of what to do to return runtime generated data
 /*
 				if (uri.contains("moo.feature"))

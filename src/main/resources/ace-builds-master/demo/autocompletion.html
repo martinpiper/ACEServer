@@ -31,6 +31,10 @@
     <div style="position: absolute; overflow: hidden; top:115px; bottom:0">
         <div style="width: 100%; height:100%; ">
             <input id="newFilename" type="text" name="txtJob" value="features/new.feature"><button onclick="createNewFile()">Edit file</button>
+            <button onclick="runFile()">Run file</button>
+            <button onclick="runSuite()">Run suite</button>
+            <button onclick="clearResults()">Clear results</button>
+            <br/>"Ctrl-Alt-h" opens help
             <iframe id="fileList" class="menu" src="../fileList.html" style="width:100%; height:100%;"></iframe>
         </div>
     </div>
@@ -49,6 +53,27 @@
         var filename = document.getElementById("newFilename").value;
         window.location.href = "autocompletion.html?filename=" + filename;
     }
+
+    function runFile()
+    {
+        var filename = document.getElementById("newFilename").value;
+        loadJSON( filename + ".run.file", function( response ) {});
+    }
+    function runSuite()
+    {
+        var filename = document.getElementById("newFilename").value;
+        loadJSON( filename + ".run.suite", function( response ) {});
+    }
+    function clearResults()
+    {
+        var filename = document.getElementById("newFilename").value;
+        loadJSON( filename + ".clear.results", function( response ) {
+            clearMarkers();
+            loadedJSON = "";
+        });
+    }
+
+
     function getQueryVariable(variable)
     {
         var query = window.location.search.substring(1);
@@ -140,7 +165,52 @@
                 callback(xobj.responseText);
               }
         };
+        xobj.onerror = function () {
+              callback("");
+        };
         xobj.send(null);
+    }
+
+    loadedJSON = "";
+    addedMarkers = [];
+
+    function clearMarkers(){
+        var index;
+        for (index = 0 ; index < addedMarkers.length ; index++) {
+            editor.session.removeMarker(addedMarkers[index]);
+        }
+
+        addedMarkers = [];
+    }
+
+    function loadMarkers(){
+        loadJSON( filename + ".debug.json", function( response ) {
+            if (response == loadedJSON)
+            {
+                return;
+            }
+            loadedJSON = response;
+
+            clearMarkers();
+
+            if (response.length == 0) {
+                return;
+            }
+
+            var actual_JSON = JSON.parse(response);
+
+            if ("lines" in actual_JSON) {
+                aceRange = require('ace/range').Range;
+                var index;
+                for (index = 0 ; index < actual_JSON.lines.length ; index++) {
+                    // This type of range will automatically move the selection if lines are inserted or deleted
+                    var r = new aceRange();
+                    r.start = editor.session.doc.createAnchor(actual_JSON.lines[index].from,0);
+                    r.end = editor.session.doc.createAnchor(actual_JSON.lines[index].to,1);
+                    addedMarkers.push(editor.session.addMarker(r, actual_JSON.lines[index].type, "fullLine"));
+                }
+            }
+        });
     }
 
     net.get("/ace-builds-master/" + filename, function(t){
@@ -149,18 +219,8 @@
         editor.focus();
 
         // This displays line highlights depending on the test run results
-        loadJSON( filename + ".debug.json", function( response ) {
-            var actual_JSON = JSON.parse(response);
-            aceRange = require('ace/range').Range;
-            var index;
-            for (index = 0 ; index < actual_JSON.lines.length ; index++) {
-                // This type of range will automatically move the selection if lines are inserted or deleted
-                var r = new aceRange();
-                r.start = editor.session.doc.createAnchor(actual_JSON.lines[index].from,0);
-                r.end = editor.session.doc.createAnchor(actual_JSON.lines[index].to,1);
-                editor.session.addMarker(r, actual_JSON.lines[index].type, "fullLine");
-            }
-        });
+        loadMarkers();
+        setInterval(function(){loadMarkers()} , 5000);
 
 
     });
