@@ -82,7 +82,10 @@
     function clearResults()
     {
         var filename = document.getElementById("newFilename").value;
+        clearMarkers();
+        loadedJSON = "";
         loadJSON( filename + ".clear.results", function( response ) {
+            // And do this afterwards as well
             clearMarkers();
             loadedJSON = "";
         });
@@ -181,7 +184,7 @@
               }
         };
         xobj.onerror = function () {
-              callback("");
+            // Any error, don't do anything
         };
         xobj.send(null);
     }
