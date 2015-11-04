@@ -6,7 +6,7 @@
 
     <groupId>ACEServer</groupId>
     <artifactId>ACEServer</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.10-SNAPSHOT</version>
 
     <build>
         <plugins>

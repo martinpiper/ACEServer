@@ -1,12 +1,12 @@
 {
   "lines" : [
-	{ "type" : "passed_step_line" ,   "from" : 2 ,    "to" : 2} ,
-	{ "type" : "failed_step_line" ,   "from" : 3 ,    "to" : 3} ,
-	{ "type" : "undefined_step_line" ,   "from" : 4 ,    "to" : 4} ,
-	{ "type" : "pending_step_line" ,   "from" : 5 ,    "to" : 5} ,
-	{ "type" : "passed_step_line" ,   "from" : 8 ,    "to" : 8} ,
-	{ "type" : "pending_step_line" ,   "from" : 11 ,    "to" : 11} ,
-	{ "type" : "undefined_step_line" ,   "from" : 14 ,    "to" : 14} ,
-	{ "type" : "failed_step_line" ,   "from" : 17 ,    "to" : 17}
+	{ "type" : "passed_step_line" ,    "from" : 3 ,    "to" : 3} ,
+	{ "type" : "failed_step_line" ,    "from" : 4 ,    "to" : 4} ,
+	{ "type" : "undefined_step_line" , "from" : 5 ,    "to" : 5} ,
+	{ "type" : "pending_step_line" ,   "from" : 6 ,    "to" : 6} ,
+	{ "type" : "passed_step_line" ,    "from" : 9 ,    "to" : 9} ,
+	{ "type" : "pending_step_line" ,   "from" : 12 ,   "to" : 12} ,
+	{ "type" : "undefined_step_line" , "from" : 15 ,   "to" : 15} ,
+	{ "type" : "skipped_step_line" ,   "from" : 18 ,   "to" : 18}
   ]
 }

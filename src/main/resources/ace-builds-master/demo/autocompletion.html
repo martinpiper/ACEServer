@@ -14,11 +14,15 @@
         position: absolute;
         }
         .pending_step_line {
-        background-color: Grey;
+        background-color: Orange;
         position: absolute;
         }
         .undefined_step_line {
         background-color: Cyan;
+        position: absolute;
+        }
+        .skipped_step_line {
+        background-color: Silver;
         position: absolute;
         }
     </style>
@@ -216,8 +220,8 @@
                 for (index = 0 ; index < actual_JSON.lines.length ; index++) {
                     // This type of range will automatically move the selection if lines are inserted or deleted
                     var r = new aceRange();
-                    r.start = editor.session.doc.createAnchor(actual_JSON.lines[index].from,0);
-                    r.end = editor.session.doc.createAnchor(actual_JSON.lines[index].to,1);
+                    r.start = editor.session.doc.createAnchor(actual_JSON.lines[index].from-1,0);
+                    r.end = editor.session.doc.createAnchor(actual_JSON.lines[index].to-1,1);
                     addedMarkers.push(editor.session.addMarker(r, actual_JSON.lines[index].type, "fullLine"));
                 }
             }
