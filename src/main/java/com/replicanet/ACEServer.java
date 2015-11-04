@@ -15,6 +15,9 @@ import java.util.Set;
  */
 public class ACEServer
 {
+	public static final String ACE_BUILDS_MASTER = "/ace-builds-master";
+	public static final String DATA = "/data";
+	public static final String STOP = "/stop";
 	static HttpServer server;
 	static Set<ACEServerCallback> callbacks = new LinkedHashSet<ACEServerCallback>();
 
@@ -32,7 +35,8 @@ public class ACEServer
 			// Loop through the callbacks until one of them returns an InputStream
 			for (ACEServerCallback callback : callbacks)
 			{
-				input = callback.beforeGet(uri);
+				String trimmed = uri.substring(ACE_BUILDS_MASTER.length());
+				input = callback.beforeGet(makePathSafe(trimmed));
 				if (null != input)
 				{
 					break;
@@ -59,14 +63,14 @@ public class ACEServer
 						try
 						{
 							// Try "target/"...  from the current directory
-							input = new FileInputStream("target/" + makePathSafe(uri.substring(18)));
+							input = new FileInputStream("target/" + makePathSafe(uri.substring(ACE_BUILDS_MASTER.length())));
 						}
 						catch (Exception e3)
 						{
 							try
 							{
 								// Try the current directory minus the "/ace-builds-master/"
-								input = new FileInputStream(makePathSafe(uri.substring(19)));
+								input = new FileInputStream(makePathSafe(uri.substring(ACE_BUILDS_MASTER.length()+1)));
 							}
 							catch (Exception e4)
 							{
@@ -103,7 +107,8 @@ public class ACEServer
 
 			// Writes the file from the online editor
 			// MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path
-			OutputStream out = new FileOutputStream(makePathSafe(uri.substring(6)));
+			uri = uri.substring(DATA.length()+1);
+			OutputStream out = new FileOutputStream(makePathSafe(uri));
 			IOUtils.copy(t.getRequestBody(),out);
 			out.close();
 
@@ -164,8 +169,8 @@ public class ACEServer
 	public static void startServer(InetSocketAddress listenAddress) throws IOException
 	{
 		server = HttpServer.create(listenAddress, 0);
-		server.createContext("/ace-builds-master", new MyHandler());
-		server.createContext("/stop", new HttpHandler()
+		server.createContext(ACE_BUILDS_MASTER, new MyHandler());
+		server.createContext(STOP, new HttpHandler()
 		{
 			public void handle(HttpExchange t) throws IOException
 			{
@@ -177,7 +182,7 @@ public class ACEServer
 		});
 
 		// var xhr = new XMLHttpRequest(); xhr.open("PUT" , "/data/t.feature" , true); xhr.send(editor.getValue());
-		server.createContext("/data", new MyHandlerPut());
+		server.createContext(DATA, new MyHandlerPut());
 
 		server.setExecutor(null);
 		server.start();
