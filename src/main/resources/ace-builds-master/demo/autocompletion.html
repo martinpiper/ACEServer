@@ -23,20 +23,31 @@
         }
     </style>
 </head>
-<body>
+<body onresize="autoResize('fileList')">
+
+<script>
+    function autoResize(id){
+        var newheight;
+
+        if(document.getElementById){
+            document.getElementById(id).height = (window.innerHeight-130-document.getElementById(id).offsetTop) + "px";
+        }
+    }
+</script>
+
 <div id="optionsPanel" style="position:absolute;height:100%;width:275px">
-    <a href="http://www.replicanet.com" title="ReplicaNet">
-        <img id="rn-logo" src="rnlogo.png" style="width: 172px;margin: -9px 30px -12px 51px;">
+    <div id="optionsPanelTop" style="background:white">
+    <a href="https://github.com/martinpiper/CukesPlus" title="CukesPlus">
+        <img id="rn-logo" src="rnlogo.png" style="width: 142px;margin: 0px 0px 0px 60px;">
     </a>
-    <div style="position: absolute; overflow: hidden; top:115px; bottom:0">
-        <div style="width: 100%; height:100%; ">
+    </div>
+    <div id="bottomHalf" style="position: absolute; overflow: hidden; top:130px;">
             <input id="newFilename" type="text" name="txtJob" value="features/new.feature"><button onclick="createNewFile()">Edit file</button>
             <button onclick="runFile()">Run file</button>
             <button onclick="runSuite()">Run suite</button>
             <button onclick="clearResults()">Clear results</button>
             <br/>"Ctrl-Alt-h" opens help
-            <iframe id="fileList" class="menu" src="../fileList.html" style="width:100%; height:100%;"></iframe>
-        </div>
+            <iframe id="fileList" class="menu" src="../fileList.html" width="100%" marginheight="0" frameborder="0"  onLoad="autoResize('fileList')"  ></iframe>
     </div>
 </div>
 

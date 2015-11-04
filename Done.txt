@@ -85,3 +85,7 @@ JS::loadMarkers() is periodically called to refresh markers for the current file
 
 Added "Run file", "Run suite" and "Clear results" buttons to the GUI.
     These in turn try to fetch URLs with extensions ".run.file", ".run.suite" and ".clear.results" so the server can act on the commands.
+
+
+
+The file list iframe now intelligently resizes
