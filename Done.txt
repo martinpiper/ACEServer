@@ -89,3 +89,7 @@ Added "Run file", "Run suite" and "Clear results" buttons to the GUI.
 
 
 The file list iframe now intelligently resizes
+
+
+
+Added run selection/current line request

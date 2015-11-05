@@ -49,6 +49,7 @@
             <input id="newFilename" type="text" name="txtJob" value="features/new.feature"><button onclick="createNewFile()">Edit file</button>
             <button onclick="runFile()">Run file</button>
             <button onclick="runSuite()">Run suite</button>
+            <button onclick="runSelection()">Run line/selection</button>
             <button onclick="clearResults()">Clear results</button>
             <br/>"Ctrl-Alt-h" opens help
             <iframe id="fileList" class="menu" src="../fileList.html" width="100%" marginheight="0" frameborder="0"  onLoad="autoResize('fileList')"  ></iframe>
@@ -78,6 +79,16 @@
     {
         var filename = document.getElementById("newFilename").value;
         loadJSON( filename + ".run.suite", function( response ) {});
+    }
+    function runSelection()
+    {
+        var filename = document.getElementById("newFilename").value;
+        var lines = "";
+        var i;
+        for (i = editor.getSelectionRange().start.row ; i<= editor.getSelectionRange().end.row ; i++) {
+            lines += ":" + (i+1);
+        }
+        loadJSON( filename + lines + ".run.file", function( response ) {});
     }
     function clearResults()
     {
