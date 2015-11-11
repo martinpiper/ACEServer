@@ -1,4 +1,21 @@
 Minimise src/resources by stripping out unwanted files.
 
 
+
 Make generic so it can be used with other Cucumber related projects.
+
+
+
+Optional status window to show any build output or progress messages.
+
+
+
+Show the status of the saved document.
+
+
+
+Optional save before choosing any of the "run" buttons.
+
+
+
+Show a warning if no timely reply is received from the web browser.
