@@ -1,3 +1,13 @@
+* Web recording to feature files
+	* Capture mouse clicks and text entry with injected JavaScript (probably use Selenium to open the page and inject the JS)
+	* Match web elements in the DOM with the most exact XPath expression from a supplied dictionary of XPath expressions
+	* If the mapping doesn't exist then create entries
+	* Map clicks/text entry events using the remapped XPath expressions to defined step syntax
+	* Create feature files
+	* Watch them being recorded in the feature editor as the recording happens (append lines to the active file)
+
+
+
 Minimise src/resources by stripping out unwanted files.
 
 
