@@ -212,6 +212,8 @@
         addedMarkers = [];
     }
 
+    linesAlreadyAddedIndex = 0;
+
     function loadMarkers(){
         loadJSON( filename + ".debug.json", function( response ) {
             if (response == loadedJSON)
@@ -230,14 +232,21 @@
 
             if ("lines" in actual_JSON) {
                 aceRange = require('ace/range').Range;
-                var index;
-                for (index = 0 ; index < actual_JSON.lines.length ; index++) {
+                for (var index = 0 ; index < actual_JSON.lines.length ; index++) {
                     // This type of range will automatically move the selection if lines are inserted or deleted
                     var r = new aceRange();
                     r.start = editor.session.doc.createAnchor(actual_JSON.lines[index].from-1,0);
                     r.end = editor.session.doc.createAnchor(actual_JSON.lines[index].to-1,1);
                     addedMarkers.push(editor.session.addMarker(r, actual_JSON.lines[index].type, "fullLine"));
                 }
+            }
+
+            if ("toAppend" in actual_JSON) {
+                for (var index = linesAlreadyAddedIndex ; index < actual_JSON.toAppend.length ; index++) {
+                    var lineToAdd = actual_JSON.toAppend[index];
+                    editor.session.insert({row: editor.session.getLength() , column:0} , "\n" + lineToAdd);
+                }
+                linesAlreadyAddedIndex = actual_JSON.toAppend.length
             }
         });
     }

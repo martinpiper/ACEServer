@@ -5,27 +5,53 @@
 	* Map clicks/text entry events using the remapped XPath expressions to defined step syntax
 	* Create feature files
 	* Watch them being recorded in the feature editor as the recording happens (append lines to the active file)
+XPath helper: https://chrome.google.com/webstore/detail/xpath-helper/hgimnogjllphhhkhlmebbmlgjoejdpjl
+
+	* This intercepts all clicks: window.onclick = function(e){console.log('clicked'); console.dir(e); console.dir(e.toElement); }
+
+* So using that idea this will display matched clicks on known xpath elements:
+
+elementsToMatch = [
+"/html/body/table/tbody/tr[2]/td/a" ,
+"/html/body/table/tbody/tr[1]/td/a" ,
+"/html/body/table/tbody/tr[3]/td/a" ,
+"/html/body/table/tbody/tr[4]/td/a"
+];
+window.onclick = function(e){console.log('clicked'); console.dir(e); console.dir(e.toElement);
+for (var i = 0 ; i < elementsToMatch.length ; i++) { console.log(elementsToMatch[i]); if ($x(elementsToMatch[i])[0] == e.toElement) { console.log("Matched with: " + elementsToMatch[i]); } }
+}
+window.onkeypress = function(e){ console.log("keyCode: " + e.keyCode + " keyIdentifier: " + e.keyIdentifier); }
+
+* This will append a text line in the current active editor window:
+
+editor.session.insert({row: editor.session.getLength() , column:0} , "\n" + "This is a line I inserted");
+
+* At this stage using Selenium to update the JavaScript hooks and xpath arrays means Selenium can be used to get event information back from the browser.
+* The ACEServer GUI can be used to initiate Selenium control of a particular Selenium controlled feature file.
+* The ACEServer and CukesPlus callback can return new lines to add to the feature without reloading or disturbing editing of the feature file at runtime.
+* The *.debug.json file can be used to supply lines to append in "toAppend"
+* When CukesPlus detects a load file request it can remove amy "toAppend" lines in the debug.json reply.
 
 
 
-Minimise src/resources by stripping out unwanted files.
+* Minimise src/resources by stripping out unwanted files.
 
 
 
-Make generic so it can be used with other Cucumber related projects.
+* Make generic so it can be used with other Cucumber related projects.
 
 
 
-Optional status window to show any build output or progress messages.
+* Optional status window to show any build output or progress messages.
 
 
 
-Show the status of the saved document.
+* Show the status of the saved document.
 
 
 
-Optional save before choosing any of the "run" buttons.
+* Optional save before choosing any of the "run" buttons.
 
 
 
-Show a warning if no timely reply is received from the web browser.
+* Show a warning if no timely reply is received from the web browser.

@@ -8,5 +8,11 @@
 	{ "type" : "pending_step_line" ,   "from" : 12 ,   "to" : 12} ,
 	{ "type" : "undefined_step_line" , "from" : 15 ,   "to" : 15} ,
 	{ "type" : "skipped_step_line" ,   "from" : 18 ,   "to" : 18}
-  ]
+  ] ,
+
+	"toAppend" : [
+      "this line" , "that line" , "another line" , "foo" , "foo2"
+	]
+
+
 }
