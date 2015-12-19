@@ -116,6 +116,10 @@ public class ACEServer
 			{
 				callback.afterPut(uri);
 			}
+
+			// Send the response after the callbacks
+			t.sendResponseHeaders(200, 0);
+			t.close();
 		}
 	}
 

@@ -277,8 +277,16 @@
         {
             var xhr = new XMLHttpRequest();
             xhr.open("PUT" , "/data/"  + filename , true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    document.getElementById("fileList").contentWindow.location.reload();
+                }
+            };
+            xhr.onerror = function () {
+            };
+
             xhr.send(editor.getValue());
-            document.getElementById("fileList").contentWindow.location.reload();
         }
     });
 
