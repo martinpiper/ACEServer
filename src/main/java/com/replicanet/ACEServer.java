@@ -70,7 +70,7 @@ public class ACEServer
 							try
 							{
 								// Try the current directory minus the "/ace-builds-master/"
-								input = new FileInputStream(makePathSafe(uri.substring(ACE_BUILDS_MASTER.length()+1)));
+								input = new FileInputStream(makePathSafe(uri.substring(ACE_BUILDS_MASTER.length() + 1)));
 							}
 							catch (Exception e4)
 							{
@@ -107,9 +107,9 @@ public class ACEServer
 
 			// Writes the file from the online editor
 			// MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path
-			uri = uri.substring(DATA.length()+1);
+			uri = uri.substring(DATA.length() + 1);
 			OutputStream out = new FileOutputStream(makePathSafe(uri));
-			IOUtils.copy(t.getRequestBody(),out);
+			IOUtils.copy(t.getRequestBody(), out);
 			out.close();
 
 			for (ACEServerCallback callback : callbacks)
@@ -125,7 +125,7 @@ public class ACEServer
 
 	static String makePathSafe(String path)
 	{
-		String ret = path.replace(".." , "");
+		String ret = path.replace("..", "");
 		while (ret.startsWith("/") || ret.startsWith("\\"))
 		{
 			ret = ret.substring(1);
