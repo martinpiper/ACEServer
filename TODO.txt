@@ -1,3 +1,23 @@
+* Just running the server and using Ctrl+Break seems to cause a thread issue and doesn't kill the process
+	"Thread-2" #14 prio=5 os_prio=0 tid=0x000000001ff1b000 nid=0x1620 runnable [0x000000002088e000]
+       java.lang.Thread.State: RUNNABLE
+    	at sun.nio.ch.WindowsSelectorImpl$SubSelector.poll0(Native Method)
+    	at sun.nio.ch.WindowsSelectorImpl$SubSelector.poll(WindowsSelectorImpl.java:314)
+    	at sun.nio.ch.WindowsSelectorImpl$SubSelector.access$400(WindowsSelectorImpl.java:293)
+    	at sun.nio.ch.WindowsSelectorImpl.doSelect(WindowsSelectorImpl.java:174)
+    	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+    	- locked <0x000000076ba221e0> (a sun.nio.ch.Util$3)
+    	- locked <0x000000076ba21940> (a java.util.Collections$UnmodifiableSet)
+    	- locked <0x000000076ba1ee10> (a sun.nio.ch.WindowsSelectorImpl)
+    	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+    	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:352)
+    	at java.lang.Thread.run(Thread.java:748)
+	>> Related?: https://bugs.openjdk.org/browse/JDK-8233185
+	>> Using this does allow the process to quit: curl http://127.0.0.1:8001/stop
+
+
+
+
 * Web recording to feature files
 	* Capture mouse clicks and text entry with injected JavaScript (probably use Selenium to open the page and inject the JS)
 	* Match web elements in the DOM with the most exact XPath expression from a supplied dictionary of XPath expressions
