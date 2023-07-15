@@ -8,14 +8,6 @@
     <artifactId>ACEServer</artifactId>
     <version>0.0.12-SNAPSHOT</version>
 
-    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-artifact</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <plugins>
             <plugin>
@@ -57,56 +49,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <configuration>
-                    <altDeploymentRepository>
-                        internal.repo::default::file://${project.build.directory}/mvn-artifact
-                    </altDeploymentRepository>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>0.12</version>
-                <configuration>
-                    <message>Maven artifacts for ${project.version}</message>
-                    <noJekyll>true</noJekyll>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <branch>refs/heads/${branch-name}</branch>
-                    <includes>
-                        <include>**/*</include>
-                    </includes>
-                    <merge>true</merge>
-                    <repositoryName>${repository-name}</repositoryName>
-                    <repositoryOwner>${repository-owner}</repositoryOwner>
-                    <server>github</server>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     <dependencies>
