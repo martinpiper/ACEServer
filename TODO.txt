@@ -77,3 +77,7 @@ editor.session.insert({row: editor.session.getLength() , column:0} , "\n" + "Thi
 
 
 * Show a warning if no timely reply is received from the web browser.
+
+
+
+* If the tags edit box needs to be preserved, then use local storage
