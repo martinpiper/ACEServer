@@ -70,7 +70,7 @@
     {
         var filename = document.getElementById("newFilename").value;
         var tags = document.getElementById("anyTags").value;
-        window.location.href = "autocompletion.html?filename=" + filename;
+        window.location.href = "autocompletion.html?filename=" + encodeURI(filename) + "&tags=" + encodeURI(tags);
     }
 
     function recordFile()
@@ -193,6 +193,10 @@
     if (getQueryVariable("filename") != "") {
         filename = getQueryVariable("filename");
         document.getElementById("newFilename").value = filename;
+    }
+    if (getQueryVariable("tags") != "") {
+        tags = getQueryVariable("tags");
+        document.getElementById("anyTags").value = tags;
     }
 
     function loadJSON(url , callback) {
