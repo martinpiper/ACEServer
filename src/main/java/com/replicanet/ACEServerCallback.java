@@ -12,9 +12,9 @@ public interface ACEServerCallback
 	 * @param uri
 	 * @return
 	 */
-	InputStream beforeGet(String uri);
+	InputStream beforeGet(String uri, String query);
 
-	void afterGet(String uri);
+	void afterGet(String uri, String query);
 
-	void afterPut(String uri);
+	void afterPut(String uri, String query);
 }

@@ -46,7 +46,8 @@
     </a>
     </div>
     <div id="bottomHalf" style="position: absolute; overflow: hidden; top:130px;">
-            <input id="newFilename" type="text" name="txtJob" value="features/new.feature"><button onclick="createNewFile()">Edit file</button>
+            <input id="newFilename" type="text" name="txtJob" value="features/new.feature"><button onclick="createNewFile()">Edit file</button></br>
+            Tags: <input id="anyTags" type="text" name="txtTags" value=""></br>
             <button onclick="runFile()">Run file</button>
             <button onclick="runSuite()">Run suite</button>
             <button onclick="runSelection()">Run line/selection</button>
@@ -68,23 +69,27 @@
     function createNewFile()
     {
         var filename = document.getElementById("newFilename").value;
+        var tags = document.getElementById("anyTags").value;
         window.location.href = "autocompletion.html?filename=" + filename;
     }
 
     function recordFile()
     {
         var filename = document.getElementById("newFilename").value;
-        loadJSON( filename + ".record.file", function( response ) {});
+        var tags = document.getElementById("anyTags").value;
+        loadJSON( filename + ".record.file?tags=" + encodeURI(tags), function( response ) {});
     }
     function runFile()
     {
         var filename = document.getElementById("newFilename").value;
-        loadJSON( filename + ".run.file", function( response ) {});
+        var tags = document.getElementById("anyTags").value;
+        loadJSON( filename + ".run.file?tags=" + encodeURI(tags), function( response ) {});
     }
     function runSuite()
     {
         var filename = document.getElementById("newFilename").value;
-        loadJSON( filename + ".run.suite", function( response ) {});
+        var tags = document.getElementById("anyTags").value;
+        loadJSON( filename + ".run.suite?tags=" + encodeURI(tags), function( response ) {});
     }
     function runSelection()
     {

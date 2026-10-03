@@ -26,9 +26,10 @@ public class ACEServer
 		public void handle(HttpExchange t) throws IOException
 		{
 			String uri = t.getRequestURI().getPath();
+			String query = t.getRequestURI().getQuery();
 			if (System.getProperty("com.replicanet.ACEServer.debug.requests") != null)
 			{
-				System.out.println(uri);
+				System.out.println(uri + " : " + query);
 			}
 			InputStream input = null;
 
@@ -36,7 +37,7 @@ public class ACEServer
 			for (ACEServerCallback callback : callbacks)
 			{
 				String trimmed = uri.substring(ACE_BUILDS_MASTER.length());
-				input = callback.beforeGet(makePathSafe(trimmed));
+				input = callback.beforeGet(makePathSafe(trimmed), query);
 				if (null != input)
 				{
 					break;
@@ -92,7 +93,7 @@ public class ACEServer
 
 			for (ACEServerCallback callback : callbacks)
 			{
-				callback.afterGet(uri);
+				callback.afterGet(uri, query);
 			}
 		}
 	}
@@ -103,7 +104,8 @@ public class ACEServer
 		public void handle(HttpExchange t) throws IOException
 		{
 			String uri = t.getRequestURI().getPath();
-			System.out.println(uri);
+			String query = t.getRequestURI().getQuery();
+			System.out.println(uri + " : " + query);
 
 			// Writes the file from the online editor
 			// MPi: TODO: Do not allow directory scanning to parents, this means removing ".." and making sure "/" is not the first in the path
@@ -114,7 +116,7 @@ public class ACEServer
 
 			for (ACEServerCallback callback : callbacks)
 			{
-				callback.afterPut(uri);
+				callback.afterPut(uri, query);
 			}
 
 			// Send the response after the callbacks
@@ -138,7 +140,7 @@ public class ACEServer
 		startServer(new InetSocketAddress(8000));
 		addCallback(new ACEServerCallback()
 		{
-			public InputStream beforeGet(String uri)
+			public InputStream beforeGet(String uri, String query)
 			{
 				System.out.println("beforeGet " + uri);
 				// An example of what to do to return runtime generated data
@@ -152,12 +154,12 @@ public class ACEServer
 				return null;
 			}
 
-			public void afterGet(String uri)
+			public void afterGet(String uri, String query)
 			{
 				System.out.println("afterGet " + uri);
 			}
 
-			public void afterPut(String uri)
+			public void afterPut(String uri, String query)
 			{
 				System.out.println("afterPut " + uri);
 			}
